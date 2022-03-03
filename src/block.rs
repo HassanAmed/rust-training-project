@@ -1,5 +1,7 @@
 use crate::helpers::mine_block;
 use chrono::Utc;
+use serde::{Deserialize, Serialize};
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Block {
     pub id: u64,
     pub hash: String,

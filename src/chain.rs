@@ -8,10 +8,10 @@ pub struct Chain {
 }
 
 impl Chain {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self { blocks: vec![] }
     }
-    fn genesis(&mut self) {
+    pub fn genesis(&mut self) {
         let genesis_block = Block {
             id: 0,
             timestamp: Utc::now().timestamp(),
@@ -23,7 +23,7 @@ impl Chain {
         self.blocks.push(genesis_block);
     }
 
-    fn try_add_block(&mut self, block: Block) {
+    pub fn try_add_block(&mut self, block: Block) {
         let latest_block = self.blocks.last().expect("");
         if self.is_block_valid(&block, latest_block) {
             self.blocks.push(block);
@@ -32,7 +32,7 @@ impl Chain {
         }
     }
 
-    fn is_block_valid(&self, block: &Block, previous_block: &Block) -> bool {
+    pub fn is_block_valid(&self, block: &Block, previous_block: &Block) -> bool {
         if previous_block.hash != block.previous_hash {
             warn!("block with id: {} has wrong previous hash", block.id);
             return false;
@@ -63,7 +63,7 @@ impl Chain {
         true
     }
 
-    fn is_chain_valid(&self, chain: &[Block]) -> bool {
+    pub fn is_chain_valid(&self, chain: &[Block]) -> bool {
         for i in 0..chain.len() {
             if i == 0 {
                 continue;
@@ -78,7 +78,7 @@ impl Chain {
         true
     }
 
-    fn choose_chain(&mut self, local: Vec<Block>, remote: Vec<Block>) -> Vec<Block> {
+    pub fn choose_chain(&mut self, local: Vec<Block>, remote: Vec<Block>) -> Vec<Block> {
         let is_local_valid = self.is_chain_valid(&local);
         let is_remote_valid = self.is_chain_valid(&remote);
 
@@ -93,7 +93,7 @@ impl Chain {
         } else if !is_remote_valid && is_local_valid {
             local
         } else {
-            panic!("local and remote both chains are invalid");
+            panic!("local and remote chains are both invalid");
         }
     }
 }
